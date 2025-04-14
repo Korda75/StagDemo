@@ -3,6 +3,11 @@ package cz.uhk.stag.main;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
@@ -58,6 +63,31 @@ public class Rozvrh extends JFrame{
         //vrací aktualni vybranou položku
         //když uživatel změní možnost, tato část to zjistí
 
+        String urlString = "https://stag-demo.uhk.cz/ws/services/rest2/rozvrhy/getRozvrhByMistnost?semestr=%25&budova=J&mistnost=J1&outputFormat=JSON";
+
+        try {
+            URL url = new URL(urlString);
+            InputStreamReader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
+            //ze vstupního proudu z url se převádí na čtecí proud s kódováním UTF
+            Gson gson = new Gson();
+            RozvrhRespons response = gson.fromJson(reader, RozvrhRespons.class);
+            //převádí se Json data do objektu RovrhRespons
+
+
+            List<RozvrhAkce> filtrovane = new ArrayList<>();
+            for (RozvrhAkce a : response.rozvrhovaAkce) {
+                if ("Přednáška".equals(a.typAkce) || "Cvičení".equals(a.typAkce)) {
+                    filtrovane.add(a);
+                }
+            }
+
+            tableModel.setData(filtrovane);
+
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Chyba při načítání dat: " + ex.getMessage(), "Chyba", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
 
 
     }
@@ -75,7 +105,7 @@ public class Rozvrh extends JFrame{
 class RozvrhTableModel extends AbstractTableModel {
 
     private List<RozvrhAkce> data = new ArrayList<>();
-    private String[] columns = {"Předmět", "Název"};
+    private String[] columns = {"Předmět", "Název", "TypAkce"};
 
     public void setData(List<RozvrhAkce> data) {
         this.data = data;
@@ -93,18 +123,29 @@ class RozvrhTableModel extends AbstractTableModel {
     }
 
     @Override
+    public String getColumnName(int column) {
+        return columns[column];
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         RozvrhAkce akce = data.get(rowIndex);
         return switch (columnIndex) {
             case 0 -> akce.predmet;
             case 1 -> akce.nazev;
+            case 2 -> akce.typAkce;
             default -> null;
         };
     }
 }
 
 class RozvrhAkce {
-    @SerializedName("Předmět") String predmet;
-    @SerializedName("Název") String nazev;
+    @SerializedName("predmet") String predmet;
+    @SerializedName("nazev") String nazev;
+    @SerializedName("typAkce") String typAkce;
+}
+
+class RozvrhRespons {
+    List<RozvrhAkce> rozvrhovaAkce;
 }
 
