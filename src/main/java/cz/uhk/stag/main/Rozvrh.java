@@ -3,7 +3,7 @@ package cz.uhk.stag.main;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.*;
 import java.awt.*;
-
+import com.google.gson.Gson;
 
 
 /**
