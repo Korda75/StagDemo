@@ -105,7 +105,7 @@ public class Rozvrh extends JFrame{
 class RozvrhTableModel extends AbstractTableModel {
 
     private List<RozvrhAkce> data = new ArrayList<>();
-    private String[] columns = {"Předmět", "Název", "TypAkce"};
+    private String[] columns = {"Předmět", "Název", "Katedra", "TypAkce", "Učitel"};
 
     public void setData(List<RozvrhAkce> data) {
         this.data = data;
@@ -133,7 +133,9 @@ class RozvrhTableModel extends AbstractTableModel {
         return switch (columnIndex) {
             case 0 -> akce.predmet;
             case 1 -> akce.nazev;
-            case 2 -> akce.typAkce;
+            case 2 -> akce.katedra;
+            case 3 -> akce.typAkce;
+            case 4 -> akce.ucitel.jmeno + " " + akce.ucitel.prijmeni;
             default -> null;
         };
     }
@@ -142,10 +144,20 @@ class RozvrhTableModel extends AbstractTableModel {
 class RozvrhAkce {
     @SerializedName("predmet") String predmet;
     @SerializedName("nazev") String nazev;
+    @SerializedName("katedra") String katedra;
     @SerializedName("typAkce") String typAkce;
+
+    @SerializedName("ucitel") Ucitel ucitel;
+
+    static class Ucitel {
+        @SerializedName("jmeno") String jmeno;
+        @SerializedName("prijmeni") String prijmeni;
+    }
+
 }
 
 class RozvrhRespons {
+    @SerializedName("rozvrhovaAkce")
     List<RozvrhAkce> rozvrhovaAkce;
 }
 
