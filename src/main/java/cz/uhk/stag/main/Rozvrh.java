@@ -74,14 +74,7 @@ public class Rozvrh extends JFrame{
             //převádí se Json data do objektu RovrhRespons
 
 
-            List<RozvrhAkce> filtrovane = new ArrayList<>();
-            for (RozvrhAkce a : response.rozvrhovaAkce) {
-                if ("Přednáška".equals(a.typAkce) || "Cvičení".equals(a.typAkce)) {
-                    filtrovane.add(a);
-                }
-            }
-
-            tableModel.setData(filtrovane);
+            tableModel.setData(response.rozvrhovaAkce);
 
 
         } catch (Exception ex) {
@@ -138,7 +131,17 @@ class RozvrhTableModel extends AbstractTableModel {
             case 4 -> akce.hodinaSkutDo.value;
             case 5 -> akce.katedra;
             case 6 -> akce.typAkce;
-            case 7 -> akce.ucitel.titulPred + " " + akce.ucitel.jmeno + " " + akce.ucitel.prijmeni + " " + akce.ucitel.titulZa;
+            case 7 -> {
+                RozvrhAkce.Ucitel ucitel = akce.ucitel;
+                if (ucitel != null) {
+                    yield (ucitel.titulPred != null ? ucitel.titulPred + " " : "") +
+                            (ucitel.jmeno != null ? ucitel.jmeno + " " : "") +
+                            (ucitel.prijmeni != null ? ucitel.prijmeni + " " : "") +
+                            (ucitel.titulZa != null ? ucitel.titulZa : "");
+                } else {
+                    yield "neuveden";
+                }
+            }
             default -> null;
         };
     }
