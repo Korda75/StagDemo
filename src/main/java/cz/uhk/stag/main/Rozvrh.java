@@ -105,7 +105,7 @@ public class Rozvrh extends JFrame{
 class RozvrhTableModel extends AbstractTableModel {
 
     private List<RozvrhAkce> data = new ArrayList<>();
-    private String[] columns = {"Předmět", "Název", "Katedra", "TypAkce", "Učitel"};
+    private String[] columns = {"Předmět", "Název", "Den", "Start", "Konec", "Katedra", "TypAkce", "Učitel"};
 
     public void setData(List<RozvrhAkce> data) {
         this.data = data;
@@ -133,9 +133,12 @@ class RozvrhTableModel extends AbstractTableModel {
         return switch (columnIndex) {
             case 0 -> akce.predmet;
             case 1 -> akce.nazev;
-            case 2 -> akce.katedra;
-            case 3 -> akce.typAkce;
-            case 4 -> akce.ucitel.jmeno + " " + akce.ucitel.prijmeni;
+            case 2 -> akce.den;
+            case 3 -> akce.hodinaSkutOd.value;
+            case 4 -> akce.hodinaSkutDo.value;
+            case 5 -> akce.katedra;
+            case 6 -> akce.typAkce;
+            case 7 -> akce.ucitel.titulPred + " " + akce.ucitel.jmeno + " " + akce.ucitel.prijmeni + " " + akce.ucitel.titulZa;
             default -> null;
         };
     }
@@ -146,18 +149,30 @@ class RozvrhAkce {
     @SerializedName("nazev") String nazev;
     @SerializedName("katedra") String katedra;
     @SerializedName("typAkce") String typAkce;
+    @SerializedName("den") String den;
+    @SerializedName("hodinaSkutOd") HodinaSkutOd hodinaSkutOd;
+    @SerializedName("hodinaSkutDo") HodinaSkutDo hodinaSkutDo;
 
     @SerializedName("ucitel") Ucitel ucitel;
 
     static class Ucitel {
         @SerializedName("jmeno") String jmeno;
         @SerializedName("prijmeni") String prijmeni;
+        @SerializedName("titulPred") String titulPred;
+        @SerializedName("titulZa") String titulZa;
+    }
+
+    static class HodinaSkutOd {
+        @SerializedName("value") String value;
+    }
+
+    static class HodinaSkutDo {
+        @SerializedName("value") String value;
     }
 
 }
 
 class RozvrhRespons {
-    @SerializedName("rozvrhovaAkce")
     List<RozvrhAkce> rozvrhovaAkce;
 }
 
