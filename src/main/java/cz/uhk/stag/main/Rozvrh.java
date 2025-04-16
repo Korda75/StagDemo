@@ -178,4 +178,3 @@ class RozvrhAkce {
 class RozvrhRespons {
     List<RozvrhAkce> rozvrhovaAkce;
 }
-
