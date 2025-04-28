@@ -2,7 +2,7 @@ package cz.uhk.stag.main;
 
 import com.google.gson.annotations.SerializedName;
 
-class RozvrhAkce {
+public class RozvrhAkce {
     @SerializedName("predmet")
     String predmet;
     @SerializedName("nazev")

@@ -31,11 +31,11 @@ public class Rozvrh extends JFrame{
         topPanel.setLayout(new FlowLayout()); //FlowLayout = rozmisťuje komponenty vedle sebe z leva do prava
 
         topPanel.add(new JLabel("Budova"));
-        budovaComboBox = new JComboBox<>(new String[]{"J"});
+        budovaComboBox = new JComboBox<>(new String[]{"J", "A"});
         topPanel.add(budovaComboBox);
 
         topPanel.add(new JLabel("Mistnost"));
-        mistnostComboBox = new JComboBox<>(new String[]{"J1"});
+        mistnostComboBox = new JComboBox<>(new String[]{"J1", "J2", "J3", "A1", "A2"});
         topPanel.add(mistnostComboBox);
 
         btNacti = new JButton("Nacist");
@@ -58,9 +58,10 @@ public class Rozvrh extends JFrame{
         //vrací aktualni vybranou položku
         //když uživatel změní možnost, tato část to zjistí
 
-        String urlString = "https://stag-demo.uhk.cz/ws/services/rest2/rozvrhy/getRozvrhByMistnost?semestr=%25&budova=J&mistnost=J1&outputFormat=JSON";
+        String urlString = "https://stag-demo.uhk.cz/ws/services/rest2/rozvrhy/getRozvrhByMistnost?budova=%s&mistnost=%s&outputFormat=JSON";
 
         try {
+            urlString = String.format(urlString, budova, mistnost);
             URL url = new URL(urlString);
             InputStreamReader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
             //ze vstupního proudu z url se převádí na čtecí proud s kódováním UTF
@@ -89,4 +90,5 @@ public class Rozvrh extends JFrame{
 
 
 }
+
 

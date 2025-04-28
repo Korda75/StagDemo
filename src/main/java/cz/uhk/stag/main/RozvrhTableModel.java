@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-class RozvrhTableModel extends AbstractTableModel {
+public class RozvrhTableModel extends AbstractTableModel {
 
     private List<RozvrhAkce> data = new ArrayList<>();
     private String[] columns = {"Předmět", "Název", "Den", "Start", "Konec", "Katedra", "TypAkce", "Učitel"};
